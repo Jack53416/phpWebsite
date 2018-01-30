@@ -109,17 +109,17 @@ class SearchForm{
     $html = "<div class = 'searchForm'>
     	<form class = 'center' action = '{$action}' method = '{$method}'>
     		<label for = 'fname'> Name:</label>
-    		<input class='rounded' name = 'fname' type = 'text'/>
+    		<input style='width:7%;' class='rounded' name = 'fname' type = 'text'/>
     		<label for = 'sname'> Surname:</label>
-    		<input class='rounded' name = 'sname' type = 'text'/>
+    		<input style='width:7%;' class='rounded' name = 'sname' type = 'text'/>
     		<label for = 'minAge'> Min Age:</label>
-    		<input class='rounded' name = 'minAge' type = 'number' min='0' max='100'/>
+    		<input style='width:7%;' class='rounded' name = 'minAge' type = 'number' min='0' max='100'/>
         <label for = 'maxAge'> Max Age:</label>
-        <input class='rounded' name = 'maxAge' type = 'number' min='0' max='100'/>
+        <input style='width:7%;' class='rounded' name = 'maxAge' type = 'number' min='0' max='100'/>
     		<label for = 'startIdx'> Start index:</label>
-    		<input class='rounded' name = 'startIdx' type = 'number' min='0'/>
+    		<input style='width:7%;' class='rounded' name = 'startIdx' type = 'number' min='0'/>
     		<label for = 'endIdx'> End index:</label>
-    		<input class='rounded' name = 'endIdx' type = 'number' min='0'/>
+    		<input style='width:7%;' class='rounded' name = 'endIdx' type = 'number' min='0'/>
     		<button type = 'submit' name='find'>find</button>
     	</form>
     </div>";
@@ -207,7 +207,7 @@ class NewStudentForm{
     	    </div>
     	    <div class='field'>
     	        <label for='bdate'>Birth Date:</label>
-    	        <input type='date' name='bdate' size='50' required />
+    	        <input style='width: 40%;' type='date' name='bdate' size='50' required />
     	    </div>
           <div class='field'>
               <label for='faculty'>Faculty:</label>
@@ -215,10 +215,10 @@ class NewStudentForm{
           </div>
           <div class='field'>
               <label for='index'>Student number:</label>
-              <input name='index' type='number' min = '0' size='50' required />
+              <input style='width: 40%;' name='index' type='number' min = '0' size='50' required />
           </div>
           <div class = 'field'>
-              <input type = 'submit' name = 'addStudent'/>
+              <button type = 'submit' name = 'addStudent'>Add</button>
           </div>
     	</form>
       </div>";
