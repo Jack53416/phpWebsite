@@ -27,7 +27,7 @@ class LoginForm{
       return;
     $session->logOut();
   }
-  
+
   public static function getHtml($action, $method, $sessionFlag){
     $html = "<div class='loginForm'>";
     if(!$sessionFlag){
@@ -56,6 +56,76 @@ class LoginForm{
   }
 }
 
+class SearchForm{
+  const minIndex = 0;
+  const minAge = 0;
+
+  public static function clean($post){
+    $result = "";
+    if(!isset($post['find']))
+      return $result;
+
+    if(!empty($post['startIdx'])){
+      $result = $result.db\Students::index." >= {$post['startIdx']}";
+    }
+    else{
+      $result = $result.db\Students::index." >= ".SearchForm::minIndex;
+    }
+
+    if(!empty($post['endIdx'])){
+      $result = $result." AND ".db\Students::index." <= {$post['endIdx']}";
+    }
+
+    if(!empty($post['fname'])){
+      $fname = $post['fname'];
+      $result = $result." AND LOWER(".db\Students::name.") LIKE LOWER('%{$fname}%')";
+    }
+
+    if(!empty($post['sname'])){
+      $sname = $post['sname'];
+      $result = $result." AND LOWER(".db\Students::surname.") LIKE LOWER('%{$sname}%')";
+    }
+
+    if(!empty($post['minAge'])){
+      $minAge = $post['minAge'];
+      $birthColumn = db\Students::birthDate;
+      $result = $result." AND DATEDIFF(YEAR, {$birthColumn} , date 'today') >= {$minAge}";
+    }
+    else{
+      $minAge = SearchForm::minAge;
+      $birthColumn = db\Students::birthDate;
+      $result = $result." AND DATEDIFF(YEAR, {$birthColumn} , date 'today') >= {$minAge}";
+    }
+
+    if(!empty($post['maxAge'])){
+      $maxAge = $post['maxAge'];
+      $birthColumn = db\Students::birthDate;
+      $result = $result." AND DATEDIFF(YEAR, {$birthColumn} , date 'today') <= {$maxAge}";
+    }
+    return $result;
+  }
+
+  public static function getHtml($action, $method){
+    $html = "<div class = 'searchForm'>
+    	<form class = 'center' action = '{$action}' method = '{$method}'>
+    		<label for = 'fname'> Name:</label>
+    		<input class='rounded' name = 'fname' type = 'text'/>
+    		<label for = 'sname'> Surname:</label>
+    		<input class='rounded' name = 'sname' type = 'text'/>
+    		<label for = 'minAge'> Min Age:</label>
+    		<input class='rounded' name = 'minAge' type = 'number' min='0' max='100'/>
+        <label for = 'maxAge'> Max Age:</label>
+        <input class='rounded' name = 'maxAge' type = 'number' min='0' max='100'/>
+    		<label for = 'startIdx'> Start index:</label>
+    		<input class='rounded' name = 'startIdx' type = 'number' min='0'/>
+    		<label for = 'endIdx'> End index:</label>
+    		<input class='rounded' name = 'endIdx' type = 'number' min='0'/>
+    		<button type = 'submit' name='find'>find</button>
+    	</form>
+    </div>";
+    return $html;
+  }
+}
 class StudentsTable{
   public static function getDeleteValues($post){
     if(!isset($post['deleteStudents']))
@@ -74,7 +144,7 @@ class StudentsTable{
               <th>Students Number</th>
               <th>Date Added</th>";
               if($sessionFlag){
-              $html = $html."<th>
+                $html = $html."<th>
                 <form onsubmit = 'return cleanDeleteForm()' action = '{$action}' method = '{$method}'>
                 <input type = 'text' name = 'deleteList' hidden/>
                 <button type = 'submit' name = 'deleteStudents'>RM</button>
@@ -129,7 +199,7 @@ class NewStudentForm{
     	<form class='user-form' action = '{$action}' method = '{$method}'>
     	    <div class='field'>
     	        <label for='firstname'>First Name:</label>
-    	        <input name='firstname' type='text' size='50' autofocus required  />
+    	        <input name='firstname' type='text' size='50' required  />
     	    </div>
     	    <div class='field'>
     	        <label for='lastname'>Last Name:</label>
@@ -141,11 +211,11 @@ class NewStudentForm{
     	    </div>
           <div class='field'>
               <label for='faculty'>Faculty:</label>
-              <input name='faculty' type='text' size='50' autofocus required  />
+              <input name='faculty' type='text' size='50' required  />
           </div>
           <div class='field'>
               <label for='index'>Student number:</label>
-              <input name='index' type='number' min = '0' size='50' autofocus required />
+              <input name='index' type='number' min = '0' size='50' required />
           </div>
           <div class = 'field'>
               <input type = 'submit' name = 'addStudent'/>

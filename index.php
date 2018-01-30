@@ -46,16 +46,18 @@ function warning_handler($errno, $errstr) {
   $error = $error.$errstr;
 }
 
-set_error_handler("warning_handler", E_WARNING);;
+set_error_handler("warning_handler", E_WARNING);
+;
 handleLogin($db, $error);
 handleNewStudent($db, $error);
 handleDeleteStudents($db, $error);
-$students = $db->querySelect("STUDENTS", "*", "");
+$studentsQuery = SearchForm::clean($_POST);
+$students = $db->querySelect("STUDENTS", "*", $studentsQuery);
 $error = $error.$students->message;
 
 if(!empty($error))
   $dp->addToolbar(ErrorDialog::getHtml($error));
-
+$dp->addToolbar(SearchForm::getHtml("index.php", "Post"));
 $dp->addContent(StudentsTable::getHtml($students->data, "index.php", "Post", Session::is_session_started()));
 $dp->addSideMenu(NewStudentForm::getHtml("index.php", "Post"));
 $dp->run(Session::is_session_started());

@@ -169,7 +169,26 @@ table.collapsed {
   margin-left:20px;
   margin-right: 20px;
 }
-.user-form {  }
+
+.searchForm{
+  padding: 5px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  display: table;
+  width: 100%;
+}
+
+.center{
+  vertical-align: center;
+  text-align: center;
+}
+
+.rounded{
+  border-radius: 7px;
+}
+
+.user-form {
+}
 
 .user-form .field { padding: 4px; margin:1px; background: #eee; }
 
