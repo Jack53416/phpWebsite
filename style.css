@@ -58,7 +58,7 @@ span.error{
 table.collapsed {
     font-family: arial, sans-serif;
     border-collapse: collapse;
-    width: 25%;
+    width: 100%;
 }
 
 .collapsed td, th {
@@ -110,12 +110,13 @@ table.collapsed {
 }
 
 .flexContainer .mainContent{
-  width: 75%;
+  width: 60%;
 }
 
 .flexContainer .sideMenu{
-  width: 25%;
+  width: 40%;
   margin-left: 20px;
+  margin-right: 20px;
 }
 
 .loginForm{
@@ -162,7 +163,13 @@ table.collapsed {
   z-index: 5;
 }
 
-.user-form { padding:20px; }
+.newUserForm{
+  padding-left: 40px;
+  padding-right: 40px;
+  margin-left:20px;
+  margin-right: 20px;
+}
+.user-form {  }
 
 .user-form .field { padding: 4px; margin:1px; background: #eee; }
 

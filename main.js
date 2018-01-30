@@ -22,3 +22,20 @@ function toggleSubmitForm(){
 	}
 	toggleSubmitForm.visible = !toggleSubmitForm.visible;
 }
+
+function cleanDeleteForm(form){
+	let markedEntries = Array.from(document.querySelectorAll("table.collapsed td input:checked"));
+	if(markedEntries.length === 0)
+		return false;
+
+	let deleteListInput = document.querySelector("table.collapsed th form input[hidden]");
+
+	let names = markedEntries.map(function(checkbox){
+		return checkbox.name;
+	});
+
+
+	deleteListInput.value = names.join(',');
+	console.log(deleteListInput.value);
+	return true;
+}

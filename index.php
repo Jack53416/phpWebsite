@@ -1,31 +1,62 @@
 <?php
 include_once "templates.php";
+include_once "database.php";
+include_once "display.php";
+include_once "session.php";
 
-class Display{
-	public $title = "Students";
-	public $footerContent = "Database project 2018";
-	public $pageContent;
+$db = new firebird\Database;
+$dp = new Display;
+$error = '';
+$session = new Session();
 
-	function addContent($newContent){
-		$this->pageContent = $this->pageContent.$newContent;
-	}
-
-	function run(){
-	  $htmlHead = "<!DOCTYPE html><html><head>
-			<title>{$this->title}</title>
-			<link rel='stylesheet' href='style.css' />
-			</head>";
-		$pageHeader = PageHeader::getHtml($this->title);
-		$pageFooter = "<div class = 'footer'> <div id = 'footer-content'>{$this->footerContent}</div></div>";
-		$pageEnd = "</body>
-      <script src='main.js'></script>
-      </html>";
-		echo $htmlHead.$pageHeader.$this->pageContent.$pageFooter.$pageEnd;
-	}
+function handleLogin(&$db, &$error){
+  global $session;
+  LoginForm::cleanLogOut($_POST, $session);
+  $condition = LoginForm::clean($_POST);
+  if(empty($condition))
+    return;
+  $result = $db->querySelect("USERS", "*", $condition);
+  if(empty($result->data)){
+    $error = $error."Invalid login or password";
+    return;
+  }
+  else{
+    $session->saveUserData($result->data[0]);
+  }
 }
 
+function handleNewStudent(&$db, &$error){
+  $values = NewStudentForm::getInsertValues($_POST);
+  if(empty($values))
+    return;
+  $result = $db->queryInsert("STUDENTS", NewStudentForm::getInsertColumns(), $values);
+  $error = $error.$result->message;
+}
 
-$dp = new Display;
-$dp->addContent(ErrorDialog::getHtml("Dupa"));
-$dp->run();
+function handleDeleteStudents(&$db, &$error){
+    $deleteCondition = StudentsTable::getDeleteValues($_POST);
+    if(empty($deleteCondition))
+      return;
+    $result = $db->queryDelete("STUDENTS",  $deleteCondition);
+    $error = $error.$result->message;
+}
+
+function warning_handler($errno, $errstr) {
+  global $error;
+  $error = $error.$errstr;
+}
+
+set_error_handler("warning_handler", E_WARNING);;
+handleLogin($db, $error);
+handleNewStudent($db, $error);
+handleDeleteStudents($db, $error);
+$students = $db->querySelect("STUDENTS", "*", "");
+$error = $error.$students->message;
+
+if(!empty($error))
+  $dp->addToolbar(ErrorDialog::getHtml($error));
+
+$dp->addContent(StudentsTable::getHtml($students->data, "index.php", "Post", Session::is_session_started()));
+$dp->addSideMenu(NewStudentForm::getHtml("index.php", "Post"));
+$dp->run(Session::is_session_started());
 ?>
